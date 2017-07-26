@@ -2,8 +2,8 @@
 <phpunit colors="true">
     <testsuites>
         <testsuite name="pluf/cache">
-            <directory>./Cache_Api/</directory>
-            <directory>./Cache_Middleware/</directory>
+            <directory>./RestLog_Api/</directory>
+            <directory>./RestLog_Middleware/</directory>
         </testsuite>
     </testsuites>
 </phpunit>

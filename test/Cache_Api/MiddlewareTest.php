@@ -25,7 +25,7 @@ require_once 'Pluf.php';
  * @author pluf.ir<info@pluf.ir>
  *
  */
-class Cache_Api_MiddlewareTest extends TestCase
+class RestLog_Api_MiddlewareTest extends TestCase
 {
 
     /**
@@ -35,9 +35,9 @@ class Cache_Api_MiddlewareTest extends TestCase
      */
     public function instance ()
     {
-        $middleware = new Cache_Middleware_RFC7234();
+        $middleware = new RestLog_Middleware_Audit();
         $this->assertTrue(isset($middleware),
-                'Impossible to create instance of Cache_Middleware_RFC7234');
+                'Impossible to create instance of RestLog_Middleware_Audit');
     }
 
     /**
@@ -47,7 +47,7 @@ class Cache_Api_MiddlewareTest extends TestCase
      */
     public function methods ()
     {
-        $middleware = new Cache_Middleware_RFC7234();
+        $middleware = new RestLog_Middleware_Audit();
         $method_names = array(
                 'process_request',
                 'process_response'
@@ -55,7 +55,7 @@ class Cache_Api_MiddlewareTest extends TestCase
         foreach ($method_names as $method_name) {
             $this->assertTrue(method_exists($middleware, $method_name), 
                     'Method ' . $method_name .
-                             ' not found in class Cache_Middleware_RFC7234');
+                             ' not found in class RestLog_Middleware_Audit');
         }
     }
 }
