@@ -1,7 +1,9 @@
 {
-	"name": "Cache",
-	"version": "0.1.0",
+	"name": "RestLog",
+	"version": "2.0.2",
 	"title": "Cache Management for requested resources from pluf servers",
-	"model": [],
+	"model": [
+		"RestLog_AuditLog"
+	],
 	"permisson": []
 }
