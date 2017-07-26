@@ -52,9 +52,10 @@ class RestLog_Middleware_Audit
         $this->log = new RestLog_AuditLog();
         $this->log->user = $request->user == null ? 0 : $request->user->id;
         $this->log->view = $request->view;
+        $this->log->host = $request->http_host;
         $this->log->method = $request->method;
         $this->log->resource = $request->uri;
-        $this->log->save();
+        $this->log->create();
         return false;
     }
 }

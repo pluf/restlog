@@ -19,6 +19,13 @@ class RestLog_AuditLog extends Pluf_Model
                 'editable' => false,
                 'readable' => true
             ),
+            'host' => array(
+                'type' => 'Pluf_DB_Field_Varchar',
+                'blank' => false,
+                'size' => 200,
+                'editable' => true,
+                'readable' => true
+            ),
             'view' => array(
                 'type' => 'Pluf_DB_Field_Varchar',
                 'blank' => false,
@@ -56,6 +63,7 @@ class RestLog_AuditLog extends Pluf_Model
             'response_dtime' => array(
                 'type' => 'Pluf_DB_Field_Datetime',
                 'blank' => true,
+                'is_null' => true,
                 'editable' => false,
                 'readable' => true
             )
@@ -64,7 +72,7 @@ class RestLog_AuditLog extends Pluf_Model
         $this->_a['idx'] = array(
             'page_class_idx' => array(
                 'col' => 'user',
-                'type' => 'unique', // normal, unique, fulltext, spatial
+                'type' => 'normal', // normal, unique, fulltext, spatial
                 'index_type' => '', // hash, btree
                 'index_option' => '',
                 'algorithm_option' => '',
@@ -83,6 +91,7 @@ class RestLog_AuditLog extends Pluf_Model
     {
         if ($this->id == '') {
             $this->request_dtime = gmdate('Y-m-d H:i:s');
+            $this->response_dtime = null;
         }
     }
 
