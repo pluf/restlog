@@ -30,6 +30,7 @@ class RestLog_Middleware_Audit
 {
 
     private $log = null;
+    private $time_start= 0;
     
     /**
      * Records some info (in this case time of response) about provided response 
@@ -42,20 +43,26 @@ class RestLog_Middleware_Audit
      */
     function process_response ($request, $response)
     {
-        $this->log->response_dtime = gmdate('Y-m-d H:i:s');
-        $this->log->update();
-        return $response;
-    }
-
-    function process_request ($request)
-    {
         $this->log = new RestLog_AuditLog();
-        $this->log->user = $request->user == null ? 0 : $request->user->id;
+        $this->log->user = $request->user;
         $this->log->view = $request->view;
         $this->log->host = $request->http_host;
         $this->log->method = $request->method;
         $this->log->resource = $request->uri;
+        $this->log->request_dtime= $request->time;
+        $this->log->time = microtime(true)- $this->time_start;
         $this->log->create();
+        return $response;
+    }
+
+    /**
+     * 
+     * @param Pluf_HTTP_Request $request
+     * @return boolean
+     */
+    function process_request ($request)
+    {
+        $this->time_start = microtime(true);
         return false;
     }
 }

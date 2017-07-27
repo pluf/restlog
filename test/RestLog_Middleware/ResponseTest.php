@@ -23,7 +23,8 @@ require_once 'Pluf.php';
  * Check middleware api
  *
  * @author pluf.ir<info@pluf.ir>
- *        
+ * @backupGlobals disabled
+ * @backupStaticAttributes disabled
  */
 class RestLog_Middleware_ResponseTest extends TestCase
 {

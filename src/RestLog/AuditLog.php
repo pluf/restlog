@@ -48,11 +48,12 @@ class RestLog_AuditLog extends Pluf_Model
                 'readable' => false
             ),
             'user' => array(
-                'type' => 'Pluf_DB_Field_Integer',
-                'blank' => false,
-                'default' => 0,
-                'editable' => false,
-                'readable' => true
+                    'type' => 'Pluf_DB_Field_Foreignkey',
+                    'model' => 'Pluf_User',
+                    'relate_name' => 'request_responsible',
+                    'blank' => true,
+                    'readable' => true,
+                    'editable' => false
             ),
             'request_dtime' => array(
                 'type' => 'Pluf_DB_Field_Datetime',
@@ -60,8 +61,8 @@ class RestLog_AuditLog extends Pluf_Model
                 'editable' => false,
                 'readable' => true
             ),
-            'response_dtime' => array(
-                'type' => 'Pluf_DB_Field_Datetime',
+            'time' => array(
+                'type' => 'Pluf_DB_Field_Integer',
                 'blank' => true,
                 'is_null' => true,
                 'editable' => false,
@@ -91,7 +92,6 @@ class RestLog_AuditLog extends Pluf_Model
     {
         if ($this->id == '') {
             $this->request_dtime = gmdate('Y-m-d H:i:s');
-            $this->response_dtime = null;
         }
     }
 
