@@ -1,6 +1,6 @@
 {
-	"name" : "pluf/cache",
-	"description" : "Library for caching requested resources",
+	"name" : "pluf/restlog",
+	"description" : "Rest access audit log module of pluf.",
 	"type" : "library",
 	"license" : "MIT",
 	"authors" : [{
@@ -28,17 +28,18 @@
 	"include-path" : [
 		"src/"
 	],
-	"homepage" : "https://github.com/pluf/cache",
+	"homepage" : "https://github.com/pluf/restlog",
 	"support" : {
 		"email" : "info@pluf.ir",
-		"issues" : "https://github.com/pluf/cache/issues",
-		"forum" : "https://github.com/pluf/cache",
-		"wiki" : "https://github.com/pluf/cache/wiki",
-		"source" : "https://github.com/pluf/cache"
+		"issues" : "https://github.com/pluf/restlog/issues",
+		"forum" : "https://github.com/pluf/restlog",
+		"wiki" : "https://github.com/pluf/restlog/wiki",
+		"source" : "https://github.com/pluf/restlog"
 	},
 	"keywords" : [
 		"pluf",
 		"php",
-		"cache"
+		"rest",
+		"audit log"
 	]
 }
