@@ -26,13 +26,6 @@ class RestLog_AuditLog extends Pluf_Model
                 'editable' => true,
                 'readable' => true
             ),
-            'view' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
-                'blank' => false,
-                'size' => 50,
-                'editable' => true,
-                'readable' => true
-            ),
             'method' => array(
                 'type' => 'Pluf_DB_Field_Varchar',
                 'blank' => true,
@@ -48,12 +41,12 @@ class RestLog_AuditLog extends Pluf_Model
                 'readable' => false
             ),
             'user' => array(
-                    'type' => 'Pluf_DB_Field_Foreignkey',
-                    'model' => 'Pluf_User',
-                    'relate_name' => 'request_responsible',
-                    'blank' => true,
-                    'readable' => true,
-                    'editable' => false
+                'type' => 'Pluf_DB_Field_Foreignkey',
+                'model' => 'Pluf_User',
+                'relate_name' => 'request_responsible',
+                'blank' => true,
+                'readable' => true,
+                'editable' => false
             ),
             'request_dtime' => array(
                 'type' => 'Pluf_DB_Field_Datetime',

@@ -20,14 +20,98 @@ use PHPUnit\Framework\TestCase;
 require_once 'Pluf.php';
 
 /**
+ * Response test class
+ */
+class MockTestHttpResponse extends Pluf_HTTP_Response
+{
+
+    function __construct ($content = '', $mimetype = null)
+    {
+        parent::__construct($content, $mimetype);
+    }
+
+    public function etag ()
+    {
+        return 'test';
+    }
+}
+
+/**
  * Check middleware api
  *
  * @author pluf.ir<info@pluf.ir>
- * @backupGlobals disabled
- * @backupStaticAttributes disabled
+ *         @backupGlobals disabled
+ *         @backupStaticAttributes disabled
  */
 class RestLog_Middleware_ResponseTest extends TestCase
 {
+
+    /**
+     * Creates DBMS
+     *
+     * @beforeClass
+     */
+    public static function createDataBase ()
+    {
+        Pluf::start(
+                array(
+                        'test' => false,
+                        'timezone' => 'Europe/Berlin',
+                        'debug' => true,
+                        'installed_apps' => array(
+                                'Pluf'
+                        ),
+                        'tmp_folder' => dirname(__FILE__) . '/../tmp',
+                        'templates_folder' => array(
+                                dirname(__FILE__) . '/../templates'
+                        ),
+                        'pluf_use_rowpermission' => true,
+                        'mimetype' => 'text/html',
+                        'app_views' => dirname(__FILE__) . '/views.php',
+                        'db_login' => 'testpluf',
+                        'db_password' => 'testpluf',
+                        'db_server' => 'localhost',
+                        'db_database' => dirname(__FILE__) .
+                                 '/../tmp/tmp.sqlite.db',
+                                'app_base' => '/testapp',
+                                'url_format' => 'simple',
+                                'db_table_prefix' => 'rest_audit_unit_tests_',
+                                'db_version' => '5.0',
+                                'db_engine' => 'SQLite',
+                                'bank_debug' => true
+                ));
+        
+        $db = Pluf::db();
+        $schema = Pluf::factory('Pluf_DB_Schema', $db);
+        $models = array(
+                'RestLog_AuditLog'
+        );
+        foreach ($models as $model) {
+            $schema->model = Pluf::factory($model);
+            $schema->dropTables();
+            if (true !== ($res = $schema->createTables())) {
+                throw new Exception($res);
+            }
+        }
+    }
+
+    /**
+     * Remove all created DBMS
+     *
+     * @afterClass
+     */
+    public static function removeDatabses ()
+    {
+        $db = Pluf::db();
+        $schema = Pluf::factory('Pluf_DB_Schema', $db);
+        $models = array(
+                'RestLog_AuditLog'
+        );
+        foreach ($models as $model) {
+            $schema->model = Pluf::factory($model);
+            $schema->dropTables();
+        }
+    }
 
     /**
      * Check if there is no cache config
@@ -45,6 +129,7 @@ class RestLog_Middleware_ResponseTest extends TestCase
         
         $middleware = new RestLog_Middleware_Audit();
         $request = new Pluf_HTTP_Request($query);
+        $request->user = new Pluf_User();
         $response = new Pluf_HTTP_Response('Hi!');
         
         // empty view
@@ -52,13 +137,10 @@ class RestLog_Middleware_ResponseTest extends TestCase
                 'ctrl' => array()
         );
         
-//         $response = $middleware->process_response($request, $response);
-//         $this->assertTrue(array_key_exists('Cache-Control', $response->headers), 
-//                 '\'Cache-Control\' not found in the header.');
-//         $this->assertTrue(
-//                 strrpos($response->headers['Cache-Control'], 'no-store') !==
-//                          false, 
-//                         'The \'no-store\' phrase not exist in header \'Cache-Control\'.');
+        $response = $middleware->process_request($request);
+        $this->assertFalse($response);
+        
+        $response = $middleware->process_response($request, $response);
+        // TODO: maso, 2017: check a new audit creation
     }
-
 }

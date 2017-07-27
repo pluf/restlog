@@ -45,7 +45,6 @@ class RestLog_Middleware_Audit
     {
         $this->log = new RestLog_AuditLog();
         $this->log->user = $request->user;
-        $this->log->view = $request->view;
         $this->log->host = $request->http_host;
         $this->log->method = $request->method;
         $this->log->resource = $request->uri;

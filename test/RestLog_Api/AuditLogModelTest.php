@@ -105,8 +105,6 @@ class RestLog_Api_AuditLogModelTestTest extends TestCase
     public function instance ()
     {
         $audit = new RestLog_AuditLog();
-//         $audit->user = $request->user;
-        $audit->view = 'view';
         $audit->host = 'localhost';
         $audit->method = 'get';
         $audit->resource = '/';
