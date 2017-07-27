@@ -49,7 +49,7 @@ class RestLog_Middleware_Audit
         $this->log->method = $request->method;
         $this->log->resource = $request->uri;
         $this->log->request_dtime= $request->time;
-        $this->log->time = microtime(true)- $this->time_start;
+        $this->log->time = round((microtime(true)- $this->time_start) * 1000);
         $this->log->create();
         return $response;
     }
