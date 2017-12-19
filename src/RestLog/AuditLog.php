@@ -42,7 +42,7 @@ class RestLog_AuditLog extends Pluf_Model
             ),
             'user' => array(
                 'type' => 'Pluf_DB_Field_Foreignkey',
-                'model' => 'Pluf_User',
+                'model' => 'User',
                 'relate_name' => 'request_responsible',
                 'blank' => true,
                 'readable' => true,
