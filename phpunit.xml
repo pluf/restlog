@@ -2,18 +2,18 @@
 <phpunit colors="true">
     <testsuites>
         <testsuite name="pluf/cache">
-            <directory>./RestLog_Api/</directory>
-            <directory>./RestLog_Middleware/</directory>
+            <directory>tests/RestLog_Api/</directory>
+            <directory>tests/RestLog_Middleware/</directory>
         </testsuite>
     </testsuites>
 
 	<!-- Code coverage -->
 	<filter>
 		<whitelist addUncoveredFilesFromWhitelist="true">
-			<directory suffix=".php">../src</directory>
+			<directory suffix=".php">src</directory>
 		</whitelist>
 	</filter>
 	<logging>
-		<log type="coverage-clover" target="./clover.xml" />
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
 	</logging>
 </phpunit>

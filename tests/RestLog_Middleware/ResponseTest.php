@@ -129,7 +129,7 @@ class RestLog_Middleware_ResponseTest extends TestCase
         
         $middleware = new RestLog_Middleware_Audit();
         $request = new Pluf_HTTP_Request($query);
-        $request->user = new Pluf_User();
+        $request->user = new User();
         $response = new Pluf_HTTP_Response('Hi!');
         
         // empty view
