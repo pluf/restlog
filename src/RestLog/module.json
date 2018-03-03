@@ -3,7 +3,20 @@
 	"version": "2.0.2",
 	"title": "Cache Management for requested resources from pluf servers",
 	"model": [
-		"RestLog_AuditLog"
+		"RestLog_AuditLog",
+		"RestLog_RestCount"
 	],
-	"permisson": []
+	"permisson": [],
+	"init": {
+		"Monitor_Property": [
+			{
+				"monitor": "tenant",
+				"name": "requests",
+				"title": "Number of Requests",
+				"cacheable": true,				
+				"description": "Number of received requests to current tenant",
+				"function": "RestLog_Monitor::requestCount()"
+			}
+		]
+	}
 }
