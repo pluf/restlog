@@ -15,7 +15,7 @@
 				"title": "Number of Requests",
 				"cacheable": true,				
 				"description": "Number of received requests to current tenant",
-				"function": "RestLog_Monitor::requestCount()"
+				"function": "RestLog_Monitor::requestCount"
 			}
 		]
 	}
