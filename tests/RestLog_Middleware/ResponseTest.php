@@ -25,12 +25,12 @@ require_once 'Pluf.php';
 class MockTestHttpResponse extends Pluf_HTTP_Response
 {
 
-    function __construct ($content = '', $mimetype = null)
+    function __construct($content = '', $mimetype = null)
     {
         parent::__construct($content, $mimetype);
     }
 
-    public function etag ()
+    public function etag()
     {
         return 'test';
     }
@@ -51,48 +51,12 @@ class RestLog_Middleware_ResponseTest extends TestCase
      *
      * @beforeClass
      */
-    public static function createDataBase ()
+    public static function createDataBase()
     {
-        Pluf::start(
-                array(
-                        'test' => false,
-                        'timezone' => 'Europe/Berlin',
-                        'debug' => true,
-                        'installed_apps' => array(
-                                'Pluf'
-                        ),
-                        'tmp_folder' => dirname(__FILE__) . '/../tmp',
-                        'templates_folder' => array(
-                                dirname(__FILE__) . '/../templates'
-                        ),
-                        'pluf_use_rowpermission' => true,
-                        'mimetype' => 'text/html',
-                        'app_views' => dirname(__FILE__) . '/views.php',
-                        'db_login' => 'testpluf',
-                        'db_password' => 'testpluf',
-                        'db_server' => 'localhost',
-                        'db_database' => dirname(__FILE__) .
-                                 '/../tmp/tmp.sqlite.db',
-                                'app_base' => '/testapp',
-                                'url_format' => 'simple',
-                                'db_table_prefix' => 'rest_audit_unit_tests_',
-                                'db_version' => '5.0',
-                                'db_engine' => 'SQLite',
-                                'bank_debug' => true
-                ));
-        
-        $db = Pluf::db();
-        $schema = Pluf::factory('Pluf_DB_Schema', $db);
-        $models = array(
-                'RestLog_AuditLog'
-        );
-        foreach ($models as $model) {
-            $schema->model = Pluf::factory($model);
-            $schema->dropTables();
-            if (true !== ($res = $schema->createTables())) {
-                throw new Exception($res);
-            }
-        }
+        Pluf::start(__DIR__ . '/../conf/config.php');
+        $m = new Pluf_Migration(Pluf::f('installed_apps'));
+        $m->install();
+        $m->init();
     }
 
     /**
@@ -100,17 +64,10 @@ class RestLog_Middleware_ResponseTest extends TestCase
      *
      * @afterClass
      */
-    public static function removeDatabses ()
+    public static function removeDatabses()
     {
-        $db = Pluf::db();
-        $schema = Pluf::factory('Pluf_DB_Schema', $db);
-        $models = array(
-                'RestLog_AuditLog'
-        );
-        foreach ($models as $model) {
-            $schema->model = Pluf::factory($model);
-            $schema->dropTables();
-        }
+        $m = new Pluf_Migration(Pluf::f('installed_apps'));
+        $m->uninstall();
     }
 
     /**
@@ -118,7 +75,7 @@ class RestLog_Middleware_ResponseTest extends TestCase
      *
      * @test
      */
-    public function notConfiguredView ()
+    public function notConfiguredView()
     {
         $query = '/example/resource';
         $_SERVER['REQUEST_METHOD'] = 'GET';
@@ -134,7 +91,7 @@ class RestLog_Middleware_ResponseTest extends TestCase
         
         // empty view
         $request->view = array(
-                'ctrl' => array()
+            'ctrl' => array()
         );
         
         $response = $middleware->process_request($request);
@@ -142,5 +99,36 @@ class RestLog_Middleware_ResponseTest extends TestCase
         
         $response = $middleware->process_response($request, $response);
         // TODO: maso, 2017: check a new audit creation
+    }
+    
+    public function checkRequestCounts()
+    {
+        $query = '/example/resource';
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['REQUEST_URI'] = 'http://localhost/example/resource';
+        $_SERVER['REMOTE_ADDR'] = 'not set';
+        $_SERVER['HTTP_HOST'] = 'localhost';
+        $GLOBALS['_PX_uniqid'] = 'example';
+        
+        $middleware = new RestLog_Middleware_Audit();
+        $request = new Pluf_HTTP_Request($query);
+        $request->user = new User();
+        $response = new Pluf_HTTP_Response('Hi!');
+        
+        // empty view
+        $request->view = array(
+            'ctrl' => array()
+        );
+        
+        $count = RestLog_Monitor::requestCount($request, array());
+        
+        $response = $middleware->process_request($request);
+        $this->assertFalse($response);
+        
+        $response = $middleware->process_response($request, $response);
+        
+        $count2 = RestLog_Monitor::requestCount($request, array());
+        
+        Test_Asset::assertEqual($count2, $count + 1);
     }
 }

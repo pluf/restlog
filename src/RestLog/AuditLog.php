@@ -97,5 +97,4 @@ class RestLog_AuditLog extends Pluf_Model
     {
         //
     }
-
 }

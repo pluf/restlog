@@ -30,36 +30,50 @@ class RestLog_Middleware_Audit
 {
 
     private $log = null;
-    private $time_start= 0;
-    
+
+    private $time_start = 0;
+
     /**
-     * Records some info (in this case time of response) about provided response 
-     *  
+     * Records some info (in this case time of response) about provided response
+     *
      * @param Pluf_HTTP_Request $request
      *            The request
      * @param Pluf_HTTP_Response $resonse
      *            The response
      * @return Pluf_HTTP_Response The response
      */
-    function process_response ($request, $response)
+    function process_response($request, $response)
     {
-        $this->log = new RestLog_AuditLog();
-        $this->log->user = $request->user;
-        $this->log->host = $request->http_host;
-        $this->log->method = $request->method;
-        $this->log->resource = $request->uri;
-        $this->log->request_dtime= $request->time;
-        $this->log->time = round((microtime(true)- $this->time_start) * 1000);
-        $this->log->create();
+        if ($request->method != 'GET') {
+            $this->log = new RestLog_AuditLog();
+            $this->log->user = $request->user;
+            $this->log->host = $request->http_host;
+            $this->log->method = $request->method;
+            $this->log->resource = $request->uri;
+            $this->log->request_dtime = $request->time;
+            $this->log->time = round((microtime(true) - $this->time_start) * 1000);
+            $this->log->create();
+        }
+        // count number of REST requests
+        $cList = Pluf::factory('RestLog_RestCount')->getList();
+        if ($cList->count() === 0) {
+            $counter = new RestLog_RestCount();
+            $counter->rest_count = 1;
+            $counter->create();
+        } else {
+            $counter = $cList[0];
+            $counter->rest_count ++;
+            $counter->update();
+        }
         return $response;
     }
 
     /**
-     * 
+     *
      * @param Pluf_HTTP_Request $request
      * @return boolean
      */
-    function process_request ($request)
+    function process_request($request)
     {
         $this->time_start = microtime(true);
         return false;
