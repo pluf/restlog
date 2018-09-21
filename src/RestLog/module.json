@@ -16,16 +16,34 @@
 				"description": "Number of received requests to current tenant",
 				"function": "RestLog_Monitor::requestCount",
 				"cacheable": true,
-				"interval": 86400
+				"interval": 3600
 			},
 			{
 				"monitor": "tenant",
 				"name": "tenant.bandwidth",
 				"title": "Bandwidth usage",
-				"description": "Bandwidth usage of REST requests of current tenant",
+				"description": "Bandwidth usage of requests/responses of current tenant",
 				"function": "RestLog_Monitor::bandwidth",
 				"cacheable": true,
-				"interval": 86400
+				"interval": 3600
+			},
+			{
+				"monitor": "tenant",
+				"name": "tenant.send_bandwidth",
+				"title": "Send bandwidth usage",
+				"description": "Bandwidth usage of responses of current tenant",
+				"function": "RestLog_Monitor::sentBandwidth",
+				"cacheable": true,
+				"interval": 3600
+			},
+			{
+				"monitor": "tenant",
+				"name": "tenant.receive_bandwidth",
+				"title": "Received bandwidth usage",
+				"description": "Bandwidth usage of requests of current tenant",
+				"function": "RestLog_Monitor::receivedBandwidth",
+				"cacheable": true,
+				"interval": 3600
 			}
 		]
 	},
@@ -38,6 +56,14 @@
 			{
 				"from": "name='tenant'",
 				"to": "name='tenant.bandwidth'"
+			},
+			{
+				"from": "name='tenant'",
+				"to": "name='tenant.send_bandwidth'"
+			},
+			{
+				"from": "name='tenant'",
+				"to": "name='tenant.receive_bandwidth'"
 			}
 		]
 	}

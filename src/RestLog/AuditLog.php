@@ -87,6 +87,13 @@ class RestLog_AuditLog extends Pluf_Model
                 'lock_option' => ''
             )
         );
+        // Views
+        $this->_a['views'] = array(
+            'bandwidth' => array(
+                'select_count' => 'sum(request_len+response_len) as total_len, sum(request_len) as receive_len, sum(response_len) as send_len'
+            )
+        );
+        
     }
 
     /**
