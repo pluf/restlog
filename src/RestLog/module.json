@@ -8,14 +8,23 @@
 	],
 	"permisson": [],
 	"init": {
-		"Monitor_Property": [
+		"Monitor_Metric": [
 			{
 				"monitor": "tenant",
-				"name": "requests",
-				"title": "Number of Requests",
-				"cacheable": true,				
+				"name": "tenant.requests",
+				"title": "Number of requested RESTs",
 				"description": "Number of received requests to current tenant",
-				"function": "RestLog_Monitor::requestCount"
+				"function": "RestLog_Monitor::requestCount",
+				"cacheable": true,
+				"interval": 86400
+			}
+		]
+	},
+	"init_assoc": {
+		"Monitor_Tag|Monitor_Metric": [
+			{
+				"from": "name='tenant'",
+				"to": "name='tenant.requests'"
 			}
 		]
 	}
