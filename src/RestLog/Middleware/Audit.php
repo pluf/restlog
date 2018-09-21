@@ -32,6 +32,7 @@ class RestLog_Middleware_Audit
     private $log = null;
 
     private $time_start = 0;
+    private $req_len = 0;
 
     /**
      * Records some info (in this case time of response) about provided response
@@ -44,7 +45,7 @@ class RestLog_Middleware_Audit
      */
     function process_response($request, $response)
     {
-        if ($request->method != 'GET') {
+//         if ($request->method != 'GET') {
             $this->log = new RestLog_AuditLog();
             $this->log->user = $request->user;
             $this->log->host = $request->http_host;
@@ -52,8 +53,10 @@ class RestLog_Middleware_Audit
             $this->log->resource = $request->uri;
             $this->log->request_dtime = $request->time;
             $this->log->time = round((microtime(true) - $this->time_start) * 1000);
+            $this->log->request_len = $this->req_len;
+            $this->log->response_len = strlen(serialize($response));
             $this->log->create();
-        }
+//         }
         // count number of REST requests
         $cList = Pluf::factory('RestLog_RestCount')->getList();
         if ($cList->count() === 0) {
@@ -76,6 +79,7 @@ class RestLog_Middleware_Audit
     function process_request($request)
     {
         $this->time_start = microtime(true);
+        $this->req_len = strlen(serialize($request));
         return false;
     }
 }

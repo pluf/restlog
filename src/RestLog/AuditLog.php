@@ -42,7 +42,7 @@ class RestLog_AuditLog extends Pluf_Model
             ),
             'user' => array(
                 'type' => 'Pluf_DB_Field_Foreignkey',
-                'model' => 'User',
+                'model' => 'User_Account',
                 'relate_name' => 'request_responsible',
                 'blank' => true,
                 'readable' => true,
@@ -55,6 +55,20 @@ class RestLog_AuditLog extends Pluf_Model
                 'readable' => true
             ),
             'time' => array(
+                'type' => 'Pluf_DB_Field_Integer',
+                'blank' => true,
+                'is_null' => true,
+                'editable' => false,
+                'readable' => true
+            ),
+            'request_len' => array(
+                'type' => 'Pluf_DB_Field_Integer',
+                'blank' => true,
+                'is_null' => true,
+                'editable' => false,
+                'readable' => true
+            ),
+            'response_len' => array(
                 'type' => 'Pluf_DB_Field_Integer',
                 'blank' => true,
                 'is_null' => true,

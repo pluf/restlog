@@ -46,4 +46,15 @@ class RestLog_Monitor
         }
         return $counter->rest_count;
     }
+    
+    /**
+     * Retruns number of received requests
+     *
+     * @param Pluf_HTTP_Request $request            
+     * @param array $match            
+     */
+    public static function bandwidth ($request, $match)
+    {
+        return 0.0;
+    }
 }
