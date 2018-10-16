@@ -8,14 +8,62 @@
 	],
 	"permisson": [],
 	"init": {
-		"Monitor_Property": [
+		"Monitor_Metric": [
 			{
 				"monitor": "tenant",
-				"name": "requests",
-				"title": "Number of Requests",
-				"cacheable": true,				
+				"name": "tenant.requests",
+				"title": "Number of requested RESTs",
 				"description": "Number of received requests to current tenant",
-				"function": "RestLog_Monitor::requestCount"
+				"function": "RestLog_Monitor::requestCount",
+				"cacheable": true,
+				"interval": 3600
+			},
+			{
+				"monitor": "tenant",
+				"name": "tenant.bandwidth",
+				"title": "Bandwidth usage",
+				"description": "Bandwidth usage of requests/responses of current tenant",
+				"function": "RestLog_Monitor::bandwidth",
+				"cacheable": true,
+				"interval": 3600
+			},
+			{
+				"monitor": "tenant",
+				"name": "tenant.send_bandwidth",
+				"title": "Send bandwidth usage",
+				"description": "Bandwidth usage of responses of current tenant",
+				"function": "RestLog_Monitor::sentBandwidth",
+				"cacheable": true,
+				"interval": 3600
+			},
+			{
+				"monitor": "tenant",
+				"name": "tenant.receive_bandwidth",
+				"title": "Received bandwidth usage",
+				"description": "Bandwidth usage of requests of current tenant",
+				"function": "RestLog_Monitor::receivedBandwidth",
+				"cacheable": true,
+				"interval": 3600
+			}
+		]
+	},
+	"init_assoc": {
+		"Monitor_Tag|Monitor_Metric": [
+			{
+				"from": "name='tenant'",
+				"to": "name='tenant.requests'"
+			},
+			{
+				"from": "name='tenant'",
+				"to": "name='tenant.bandwidth'"
+			},
+			{
+				"from": "name='tenant'",
+				"to": "name='tenant.send_bandwidth'"
+			},
+			{
+				"from": "name='tenant'",
+				"to": "name='tenant.receive_bandwidth'"
 			}
 		]
 	}

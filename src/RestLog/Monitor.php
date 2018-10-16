@@ -46,4 +46,46 @@ class RestLog_Monitor
         }
         return $counter->rest_count;
     }
+    
+    private static function getBandwidth($prop){
+        $model = Pluf::factory('RestLog_AuditLog');
+        $cList = $model->getList(array(
+            'count' => true,
+            'view' => 'bandwidth'
+        ));
+        return $cList[0][$prop];
+    }
+    
+    /**
+     * Retruns total volume of bandwidth
+     *
+     * @param Pluf_HTTP_Request $request            
+     * @param array $match            
+     */
+    public static function bandwidth ($request, $match)
+    {
+        return static::getBandwidth('total_len');
+    }
+    
+    /**
+     * Retruns volume of sent bandwidth
+     *
+     * @param Pluf_HTTP_Request $request            
+     * @param array $match            
+     */
+    public static function sentBandwidth ($request, $match)
+    {
+        return static::getBandwidth('send_len');
+    }
+    
+    /**
+     * Retruns volume of received bandwidth
+     *
+     * @param Pluf_HTTP_Request $request            
+     * @param array $match            
+     */
+    public static function receivedbandwidth ($request, $match)
+    {
+        return static::getBandwidth('receive_len');
+    }
 }
