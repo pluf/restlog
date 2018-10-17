@@ -19,7 +19,7 @@
 	"require" : {
 		"pluf/core" : "^4.0.0",
 		"pluf/user" : "^4.0.0",
-		"pluf/monitor": "^3.0"
+		"pluf/monitor" : "^4.0.0"
 	},
 	"require-dev" : {
 		"pluf/test" : "^4.0.0"
