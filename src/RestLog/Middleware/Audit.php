@@ -50,7 +50,7 @@ class RestLog_Middleware_Audit
             $this->log->user = $request->user;
             $this->log->host = $request->http_host;
             $this->log->method = $request->method;
-            $this->log->resource = $request->uri;
+            $this->log->resource = $request->path_info;
             $this->log->request_dtime = $request->time;
             $this->log->time = round((microtime(true) - $this->time_start) * 1000);
             $this->log->request_len = $this->req_len;
