@@ -26,6 +26,7 @@ $cfg['installed_apps'] = array(
     'Role',
     'Group',
     'Monitor',
+    'Tenant',
     'RestLog'
 );
 
