@@ -78,7 +78,9 @@ class RestLog_Middleware_Audit
      */
     function process_request($request)
     {
+        // TODO: maso, 2019: replace with $request->getTime();
         $this->time_start = microtime(true);
+        // TODO: maso, 2019: replace with $request->getSize();
         $this->req_len = strlen(serialize($request));
         return false;
     }
