@@ -71,11 +71,11 @@ class RestLog_Middleware_ResponseTest extends TestCase
     }
 
     /**
-     * Check if there is no cache config
+     * Check processing a simple request
      *
      * @test
      */
-    public function notConfiguredView()
+    public function processSimpleRequest()
     {
         $query = '/example/resource';
         $_SERVER['REQUEST_METHOD'] = 'GET';
@@ -83,24 +83,69 @@ class RestLog_Middleware_ResponseTest extends TestCase
         $_SERVER['REMOTE_ADDR'] = 'not set';
         $_SERVER['HTTP_HOST'] = 'localhost';
         $GLOBALS['_PX_uniqid'] = 'example';
-        
+
         $middleware = new RestLog_Middleware_Audit();
         $request = new Pluf_HTTP_Request($query);
         $request->user = new User_Account();
         $response = new Pluf_HTTP_Response('Hi!');
-        
+
         // empty view
         $request->view = array(
             'ctrl' => array()
         );
-        
+
         $response = $middleware->process_request($request);
         $this->assertFalse($response);
-        
+
         $response = $middleware->process_response($request, $response);
         // TODO: maso, 2017: check a new audit creation
     }
-    
+
+    /**
+     * Check processing a request with attached file
+     *
+     * @test
+     */
+    public function processRequestWithAttachedFile()
+    {
+        $query = '/example/resource';
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['REQUEST_URI'] = 'http://localhost/example/resource';
+        $_SERVER['REMOTE_ADDR'] = 'not set';
+        $_SERVER['HTTP_HOST'] = 'localhost';
+        $GLOBALS['_PX_uniqid'] = 'example';
+        $filePath = __DIR__ . '/../data/man.png';
+        $fileSize = filesize($filePath);
+        $_FILES['file'] = array(
+            'name' => 'man.png',
+            'tmp_name' => $filePath,
+            'type' => 'image/png',
+            'size' => $fileSize,
+            'error' => 0
+        );
+
+        $middleware = new RestLog_Middleware_Audit();
+        $request = new Pluf_HTTP_Request($query);
+        $request->user = new User_Account();
+        $response = new Pluf_HTTP_Response('Hi!');
+
+        // empty view
+        $request->view = array(
+            'ctrl' => array()
+        );
+
+        $response = $middleware->process_request($request);
+        $this->assertFalse($response);
+
+        $response = $middleware->process_response($request, $response);
+        // TODO: maso, 2017: check a new audit creation
+    }
+
+    /**
+     * Check counter of requests
+     *
+     * @test
+     */
     public function checkRequestCounts()
     {
         $query = '/example/resource';
@@ -109,26 +154,26 @@ class RestLog_Middleware_ResponseTest extends TestCase
         $_SERVER['REMOTE_ADDR'] = 'not set';
         $_SERVER['HTTP_HOST'] = 'localhost';
         $GLOBALS['_PX_uniqid'] = 'example';
-        
+
         $middleware = new RestLog_Middleware_Audit();
         $request = new Pluf_HTTP_Request($query);
         $request->user = new User_Account();
         $response = new Pluf_HTTP_Response('Hi!');
-        
+
         // empty view
         $request->view = array(
             'ctrl' => array()
         );
-        
+
         $count = RestLog_Monitor::requestCount($request, array());
-        
+
         $response = $middleware->process_request($request);
         $this->assertFalse($response);
-        
+
         $response = $middleware->process_response($request, $response);
-        
+
         $count2 = RestLog_Monitor::requestCount($request, array());
-        
-        Test_Asset::assertEqual($count2, $count + 1);
+
+        $this->assertEquals($count2, $count + 1);
     }
 }
