@@ -17,13 +17,13 @@
 	],
 	"minimum-stability" : "stable",
 	"require" : {
-		"pluf/core" : "5.13.x",
-		"pluf/user" : "5.13.x",
-		"pluf/monitor" : "5.13.x",
-		"pluf/tenant" : "5.13.x"
+		"pluf/core" : "6.x",
+		"pluf/user" : "6.x",
+		"pluf/monitor" : "6.x",
+		"pluf/tenant" : "6.x"
 	},
 	"require-dev" : {
-		"pluf/test" : "5.13.x"
+		"pluf/test" : "6.x"
 	},
 	"include-path" : [
 		"src/"
