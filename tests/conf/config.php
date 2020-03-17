@@ -23,8 +23,6 @@ $cfg = include 'sqlite.config.php';
 $cfg['installed_apps'] = array(
     'Pluf',
     'User',
-    'Role',
-    'Group',
     'Monitor',
     'Tenant',
     'RestLog'
@@ -43,22 +41,13 @@ $cfg['multitenant'] = false;
  * Middlewares
  */
 $cfg['middleware_classes'] = array(
-    // find tenant
-    'Pluf_Middleware_TenantEmpty',
-    // Sessions
-    'Pluf_Middleware_Session',
+    '\Pluf\Middleware\Tenant',
+    '\Pluf\Middleware\Session',
     'User_Middleware_Session'
 );
 
 $cfg['secret_key'] = '5a8d7e0f2aad8bdab8f6eef725412850';
-
-// Temporary folder where the script is writing the compiled templates,
-// cached data and other temporary resources.
-// It must be writeable by your webserver instance.
-// It is mandatory if you are using the template system.
-$cfg['tmp_folder'] = __DIR__ . '/../tmp';
-
-// The folder in which the templates of the application are located.
+$cfg['tmp_folder'] = '/tmp';
 $cfg['templates_folder'] = array(
     __DIR__ . '/../templates'
 );
